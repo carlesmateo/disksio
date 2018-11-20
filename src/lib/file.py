@@ -97,11 +97,11 @@ class File:
             a_result = fh.read()
             fh.close()
 
+            # For python2
+            a_result = bytearray(a_result)
+
         except:
             b_success = False
-
-        # For python2
-        a_result = bytearray(a_result)
 
         return b_success, a_result
 
