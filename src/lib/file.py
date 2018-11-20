@@ -101,6 +101,7 @@ class File:
             a_result = bytearray(a_result)
 
         except:
+            a_result = []
             b_success = False
 
         return b_success, a_result
