@@ -61,6 +61,30 @@ class TestFile(object):
 
         assert b_result is False
 
+    def test_get_read_binary(self):
+        """
+        Tests the Reading of a binary file.
+        This is provided for compatibility with Python3 and Python2 as using File.read will end into
+        Python3 attempting to convert the file to utf-8
+        :return:
+        """
+        o_file = File()
+
+        s_file = "/tmp/mpmstor-binary.test"
+
+        b_result = o_file.write(s_file, "ABC")
+        assert b_result is True
+
+        b_result, a_binary_content = o_file.read_binary(s_file)
+        assert b_result is True
+
+        s_text_content = ""
+        for i_char in a_binary_content:
+            if i_char > 40 and i_char < 123:
+                s_text_content += chr(i_char)
+
+        assert s_text_content == "ABC"
+
     def test_delete_ko(self):
         o_file = File()
         b_result = o_file.delete("/not_existing/test_file.txt")

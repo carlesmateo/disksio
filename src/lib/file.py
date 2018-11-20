@@ -57,11 +57,14 @@ class File:
 
     def read(self, s_file):
         """
-        This method reads the file
+        This method reads the file in text format.
+        Note: Python3 will try to UTF-8 Decode and return "UnicodeDecodeError: 'utf-8' codec can't decode byte"
         :param s_file: The file path for the file to read
         :type s_file: str
-        :return: Indicate success reading
+        :return: b_result: Indicate success reading
         :rtype boolean
+        :return: s_result: The text
+        :rtype str
         """
         s_result = ""
         b_success = True
@@ -75,6 +78,32 @@ class File:
             b_success = False
 
         return b_success, s_result
+
+    def read_binary(self, s_file):
+        """
+        This method reads the file in binary format
+        :param s_file: The file path for the file to read
+        :type s_file: str
+        :return: Indicate success reading
+        :rtype boolean
+        :return: a_result: byte array
+        :rtype byte_array
+        """
+        a_result = []
+        b_success = True
+
+        try:
+            fh = open(s_file, "rb")
+            a_result = fh.read()
+            fh.close()
+
+        except:
+            b_success = False
+
+        # For python2
+        a_result = bytearray(a_result)
+
+        return b_success, a_result
 
     def readlines(self, s_file):
         """
