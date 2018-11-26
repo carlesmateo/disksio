@@ -149,13 +149,20 @@ class DriveUtils:
                 disk.type = "Spinning"
 
         # get serial number
-        b_success, a_serial = self.o_file.read_binary(s_drive_path + "/device/vpd_pg80")
-        if b_success is True:
-            for i_char in a_serial:
-                if i_char > 40 and i_char < 123:
-                    disk.s_serial += chr(i_char)
+        s_serial = ""
+        s_file_serial = s_drive_path + "/device/vpd_pg80"
+        if self.o_file.file_exists(s_file_serial) is True:
+            b_success, a_serial = self.o_file.read_binary(s_file_serial)
+            if b_success is True:
+                for i_char in a_serial:
+                    if i_char > 40 and i_char < 123:
+                        s_serial += chr(i_char)
+                disk.s_serial = s_serial
+            else:
+                disk.s_serial = ""
+                print("Error reading: " + s_file_serial)
         else:
-            print("Error reading: " + s_drive_path + "/device/vpd_pg80")
+            disk.s_serial = ""
 
         # check drive is readable
         b_success, s_serial = self.o_file.read(s_drive_path + "/stat")
@@ -165,6 +172,7 @@ class DriveUtils:
                 if s_part != "0":
                     b_readable = True
                     break
+
         if b_readable is False:
             disk.status = Disk.STATUS_FAILURE
             disk.b_unreadable = True
